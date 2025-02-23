@@ -1,4 +1,4 @@
-package com.example.vkvideotrainee.activities
+package com.example.vkvideotrainee.ui.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

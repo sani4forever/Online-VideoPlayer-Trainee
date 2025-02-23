@@ -9,7 +9,7 @@ import org.junit.Test
 class VideoPlayerViewModelTest {
 
     @get:Rule
-    val rule = InstantTaskExecutorRule() // Для работы с LiveData
+    val rule = InstantTaskExecutorRule()
 
     private val viewModel = VideoPlayerViewModel()
 

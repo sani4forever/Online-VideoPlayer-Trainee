@@ -1,4 +1,4 @@
-package com.example.vkvideotrainee.fragments
+package com.example.vkvideotrainee.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vkvideotrainee.databinding.FragmentVideoListBinding
-import com.example.vkvideotrainee.recyclerview.VideoAdapter
+import com.example.vkvideotrainee.ui.adapters.VideoAdapter
 import com.example.vkvideotrainee.viewmodels.VideoViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -21,7 +22,6 @@ class VideoListFragment : Fragment() {
     private var _binding: FragmentVideoListBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<VideoViewModel>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,55 +34,56 @@ class VideoListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navController = findNavController()
+        setupRecyclerView()
+        setupSwipeToRefresh()
+        observeViewModel()
+    }
+
+    private fun setupRecyclerView() {
         val videoAdapter = VideoAdapter { videoUrl ->
             val action = VideoListFragmentDirections
                 .actionVideoListFragmentToVideoPlayerFragment(videoUrl)
-            navController.navigate(action)
+            findNavController().navigate(action)
         }
 
         binding.videoRecyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = videoAdapter
         }
+    }
 
+    private fun setupSwipeToRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            refreshVideoList()
-            binding.swipeRefreshLayout.isRefreshing = false
+            viewModel.fetchVideos()
         }
+    }
 
+    private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.videos.collect { videos ->
-                        videoAdapter.submitList(videos)
+                    viewModel.videos.collectLatest { videos ->
+                        (binding.videoRecyclerView.adapter as? VideoAdapter)?.submitList(videos)
                         binding.videoRecyclerView.visibility = if (videos.isNotEmpty()) View.VISIBLE else View.GONE
                     }
                 }
                 launch {
-                    viewModel.isLoading.collect { isLoading ->
+                    viewModel.isLoading.collectLatest { isLoading ->
                         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                        binding.swipeRefreshLayout.isRefreshing = isLoading
                     }
                 }
                 launch {
-                    viewModel.errorMessage.collect { errorMessage ->
-                        if (errorMessage != null) {
-                            binding.errorTextView.text = errorMessage
-                            binding.errorTextView.visibility = View.VISIBLE
-                        } else {
-                            binding.errorTextView.visibility = View.GONE
+                    viewModel.errorMessage.collectLatest { errorMessage ->
+                        binding.errorTextView.apply {
+                            text = errorMessage
+                            visibility = if (errorMessage != null) View.VISIBLE else View.GONE
                         }
                     }
                 }
             }
         }
     }
-
-
-    private fun refreshVideoList() {
-        viewModel.fetchVideos()
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -22,7 +22,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-
     }
 
     buildTypes {
@@ -50,52 +49,37 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation ("io.mockk:mockk-android:1.13.16")
+    testImplementation (libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.androidx.core.testing)
+
     implementation(libs.koin.android)
 
-
-    // Java language implementation
     implementation(libs.androidx.fragment)
-    // Kotlin
     implementation(libs.androidx.fragment.ktx)
 
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.navigation.dynamic.features.fragment)
+
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.swiperefreshlayout)
-
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
 
     implementation (libs.androidx.media3.exoplayer)
     implementation (libs.androidx.media3.ui)
 
     implementation (libs.glide)
 
-
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    testImplementation (libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.androidx.core.testing)
-
-
-
-
-
-    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-
-
-
     implementation(libs.kotlinx.serialization.json)
-
-
-
 }
