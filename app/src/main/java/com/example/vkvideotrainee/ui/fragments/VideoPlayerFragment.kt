@@ -1,4 +1,4 @@
-package com.example.vkvideotrainee.fragments
+package com.example.vkvideotrainee.ui.fragments
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,11 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.fragment.navArgs
 import com.example.vkvideotrainee.databinding.FragmentVideoPlayerBinding
 import com.example.vkvideotrainee.viewmodels.VideoPlayerViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoPlayerFragment : Fragment() {
@@ -33,12 +37,14 @@ class VideoPlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val videoUrl = args.url
-        viewModel.playbackPosition.observe(viewLifecycleOwner) { position ->
-            try {
-                initializePlayer(videoUrl, position)
-            } catch (e: Exception) {
-                showError("Ошибка при запуске видео: ${e.localizedMessage}")
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.playbackPosition.collect { position ->
+                    initializePlayer(videoUrl, position)
+                }
             }
         }
     }
@@ -52,20 +58,16 @@ class VideoPlayerFragment : Fragment() {
                 player.prepare()
                 player.seekTo(startPosition)
                 player.play()
-                Log.d("aboba", videoUrl)
+                Log.d("VideoPlayer", "Playing video from: $videoUrl at position: $startPosition")
             }
         } catch (e: Exception) {
-            showError("Не удалось инициализировать ExoPlayer: ${e.localizedMessage}")
+            showError("Ошибка при инициализации ExoPlayer: ${e.localizedMessage}")
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        try {
-            viewModel.savePlaybackPosition(exoPlayer?.currentPosition ?: 0L)
-        } catch (e: Exception) {
-            showError("Ошибка при сохранении позиции: ${e.localizedMessage}")
-        }
+        viewModel.savePlaybackPosition(exoPlayer?.currentPosition ?: 0L)
         releasePlayer()
         _binding = null
     }

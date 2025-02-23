@@ -1,11 +1,12 @@
-package com.example.vkvideotrainee.data
+package com.example.vkvideotrainee.data.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.vkvideotrainee.data.db.entities.VideoEntity
 
-@Database(entities = [Video::class], version = 1, exportSchema = false)
+@Database(entities = [VideoEntity::class], version = 2, exportSchema = false)
 abstract class VideoDatabase : RoomDatabase() {
     abstract fun videoDao(): VideoDao
 

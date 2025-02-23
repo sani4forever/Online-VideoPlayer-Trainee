@@ -1,7 +1,7 @@
 package com.example.vkvideotrainee
 
 import androidx.media3.exoplayer.ExoPlayer
-import com.example.vkvideotrainee.fragments.VideoPlayerFragment
+import com.example.vkvideotrainee.ui.fragments.VideoPlayerFragment
 import io.mockk.*
 import org.junit.Before
 import org.junit.Test

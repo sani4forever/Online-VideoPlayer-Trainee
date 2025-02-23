@@ -1,6 +1,6 @@
 VK Video Trainee 🎥
 
-VK Video Trainee is an Android application for browsing and playing videos. It features a modern UI with a video list screen and a media player built using Media3 ExoPlayer. Videos are fetched from a remote API using Retrofit, and thumbnails are displayed with Coil or Glide, extracting frames if no thumbnail is provided.
+VK Video Trainee is an Android application for browsing and playing videos. It features a modern UI with a video list screen and a media player built using Media3 ExoPlayer. Videos are fetched from a remote API using Retrofit, and thumbnails are displayed with Glide, extracting frames if no thumbnail is provided.
 
 Features ✨
 
@@ -19,7 +19,7 @@ Technologies Used 🛠
 
 Kotlin – Primary language for Android development
 
-Jetpack Compose & XML – UI creation
+XML – UI creation
 
 Retrofit – API calls
 
@@ -29,9 +29,8 @@ LiveData & ViewModel – State management
 
 Media3 ExoPlayer – Video playback
 
-Coil & Glide – Image loading
+Glide – Image loading
 
 Coroutines & Flow – Asynchronous operations
 
 Koin – Dependency Injection
-
