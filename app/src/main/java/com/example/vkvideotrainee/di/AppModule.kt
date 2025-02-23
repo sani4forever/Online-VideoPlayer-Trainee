@@ -14,7 +14,7 @@ val appModule = module {
     // Retrofit
     single {
         Retrofit.Builder()
-            .baseUrl("https://pashok11.tw1.su/apis/vk_trainee/")
+            .baseUrl("https://pashok11.tw1.su/apis/vk_trainee/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

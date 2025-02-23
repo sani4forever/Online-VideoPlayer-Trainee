@@ -2,9 +2,11 @@ package com.example.vkvideotrainee.fragments
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
@@ -33,30 +35,52 @@ class VideoPlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val videoUrl = args.url
         viewModel.playbackPosition.observe(viewLifecycleOwner) { position ->
-            initializePlayer(videoUrl, position)
+            try {
+                initializePlayer(videoUrl, position)
+            } catch (e: Exception) {
+                showError("Ошибка при запуске видео: ${e.localizedMessage}")
+            }
         }
     }
 
-    private fun initializePlayer(videoUrl: String, startPosition: Long) {
-        exoPlayer = ExoPlayer.Builder(requireContext()).build()
-        binding.playerView.player = exoPlayer
-
-        val mediaItem = MediaItem.fromUri(Uri.parse(videoUrl))
-        exoPlayer?.setMediaItem(mediaItem)
-        exoPlayer?.prepare()
-        exoPlayer?.seekTo(startPosition)
-        exoPlayer?.play()
+    fun initializePlayer(videoUrl: String, startPosition: Long) {
+        try {
+            exoPlayer = ExoPlayer.Builder(requireContext()).build().also { player ->
+                binding.playerView.player = player
+                val mediaItem = MediaItem.fromUri(Uri.parse(videoUrl))
+                player.setMediaItem(mediaItem)
+                player.prepare()
+                player.seekTo(startPosition)
+                player.play()
+                Log.d("aboba", videoUrl)
+            }
+        } catch (e: Exception) {
+            showError("Не удалось инициализировать ExoPlayer: ${e.localizedMessage}")
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.savePlaybackPosition(exoPlayer?.currentPosition ?: 0L)
+        try {
+            viewModel.savePlaybackPosition(exoPlayer?.currentPosition ?: 0L)
+        } catch (e: Exception) {
+            showError("Ошибка при сохранении позиции: ${e.localizedMessage}")
+        }
         releasePlayer()
         _binding = null
     }
 
     private fun releasePlayer() {
-        exoPlayer?.release()
-        exoPlayer = null
+        try {
+            exoPlayer?.release()
+        } catch (e: Exception) {
+            showError("Ошибка при освобождении ExoPlayer: ${e.localizedMessage}")
+        } finally {
+            exoPlayer = null
+        }
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

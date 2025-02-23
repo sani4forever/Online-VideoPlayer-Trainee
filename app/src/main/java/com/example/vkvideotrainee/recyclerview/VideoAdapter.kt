@@ -1,52 +1,42 @@
 package com.example.vkvideotrainee.recyclerview
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.vkvideotrainee.R
 import com.example.vkvideotrainee.data.Video
+import com.example.vkvideotrainee.databinding.ItemVideoBinding
 
 class VideoAdapter(
     private val onVideoClick: (String) -> Unit
 ) : ListAdapter<Video, VideoAdapter.VideoViewHolder>(VideoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_video, parent, false)
-        return VideoViewHolder(view, onVideoClick)
+        val binding = ItemVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return VideoViewHolder(binding, onVideoClick)
     }
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class VideoViewHolder(itemView: View, private val onVideoClick: (String) -> Unit) :
-        RecyclerView.ViewHolder(itemView) {
-
-        private val videoThumbnail: ImageView = itemView.findViewById(R.id.videoThumbnail)
-        private val videoTitle: TextView = itemView.findViewById(R.id.videoTitle)
-        private val videoDuration: TextView = itemView.findViewById(R.id.videoDuration)
+    class VideoViewHolder(
+        private val binding: ItemVideoBinding,
+        private val onVideoClick: (String) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(video: Video) {
-            videoTitle.text = video.title
-            videoDuration.text = video.duration
-            if (video.thumbnailUrl.isNotBlank()) {
-                Glide.with(itemView)
-                    .load(video.thumbnailUrl)
-                    .into(videoThumbnail)
-            } else {
-                Glide.with(itemView)
-                    .load(video.videoUrl)
-                    .frame(1000000)
-                    .into(videoThumbnail)
-            }
+            binding.videoTitle.text = video.title
+            binding.videoDuration.text = video.duration
 
-            itemView.setOnClickListener {
+            val thumbnailUrl = video.thumbnailUrl.ifBlank { video.videoUrl }
+            Glide.with(binding.root)
+                .load(thumbnailUrl)
+                .into(binding.videoThumbnail)
+
+            binding.root.setOnClickListener {
                 onVideoClick(video.videoUrl)
             }
         }
