@@ -53,6 +53,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation ("io.mockk:mockk-android:1.13.16")
+    testImplementation (libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.androidx.core.testing)
 
     implementation(libs.koin.android)
 
@@ -74,10 +78,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-
-    testImplementation (libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.androidx.core.testing)
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
