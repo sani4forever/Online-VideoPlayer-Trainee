@@ -12,7 +12,7 @@ Features ✨
 
 📷 Extract a video frame as a thumbnail if none is provided
 
-🏗 Built with MVVM, Jetpack Navigation, and Room
+🏗 Built with MVVM, Jetpack Navigation, Glide and Room
 
 
 Technologies Used 🛠
@@ -25,7 +25,7 @@ Retrofit – API calls
 
 Room & SQLite – Local data storage
 
-LiveData & ViewModel – State management
+ViewModel – State management
 
 Media3 ExoPlayer – Video playback
 
@@ -34,3 +34,11 @@ Glide – Image loading
 Coroutines & Flow – Asynchronous operations
 
 Koin – Dependency Injection
+
+Screenshoots 📸
+
+![screenshot1](GitHub%20IMG/VideoList1.png)
+![screenshot2](GitHub%20IMG/VideoList2.png)
+![screenshot3](GitHub%20IMG/VideoPlayer1.png)
+![screenshot4](GitHub%20IMG/VideoPlayer2.png)
+![screenshot5](GitHub%20IMG/VideoPlayer3.png)
