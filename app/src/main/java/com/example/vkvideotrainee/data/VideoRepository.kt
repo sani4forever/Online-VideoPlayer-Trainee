@@ -1,6 +1,6 @@
 package com.example.vkvideotrainee.data
 
-class VideoRepository(private val videoDao: VideoDao, private val api: VideoApi) {
+class VideoRepository(val videoDao: VideoDao, private val api: VideoApi) {
 
     suspend fun getVideos(): List<Video>? {
         val response = api.getVideos()

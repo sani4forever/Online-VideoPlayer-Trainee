@@ -41,8 +41,6 @@ class VideoListFragment : Fragment() {
             navController.navigate(action)
         }
 
-
-
         binding.videoRecyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = videoAdapter
@@ -53,17 +51,34 @@ class VideoListFragment : Fragment() {
             binding.swipeRefreshLayout.isRefreshing = false
         }
 
-
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.videos.collect { videos ->
-                    videoAdapter.submitList(videos)
+                launch {
+                    viewModel.videos.collect { videos ->
+                        videoAdapter.submitList(videos)
+                        binding.videoRecyclerView.visibility = if (videos.isNotEmpty()) View.VISIBLE else View.GONE
+                    }
+                }
+                launch {
+                    viewModel.isLoading.collect { isLoading ->
+                        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                    }
+                }
+                launch {
+                    viewModel.errorMessage.collect { errorMessage ->
+                        if (errorMessage != null) {
+                            binding.errorTextView.text = errorMessage
+                            binding.errorTextView.visibility = View.VISIBLE
+                        } else {
+                            binding.errorTextView.visibility = View.GONE
+                        }
+                    }
                 }
             }
         }
-
     }
+
+
     private fun refreshVideoList() {
         viewModel.fetchVideos()
     }
