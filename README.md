@@ -37,8 +37,9 @@ Koin – Dependency Injection
 
 Screenshoots 📸
 
-![screenshot1](GitHub%20IMG/VideoList1.png)
-![screenshot2](GitHub%20IMG/VideoList2.png)
-![screenshot3](GitHub%20IMG/VideoPlayer1.png)
-![screenshot4](GitHub%20IMG/VideoPlayer2.png)
-![screenshot5](GitHub%20IMG/VideoPlayer3.png)
+<img src="GitHub_img/VideoList1.png" width="500">
+<img src="GitHub_img/VideoList2.png" width="500">
+<img src="GitHub_img/VideoPlayer1.png" width="500">
+<img src="GitHub_img/VideoPlayer2.png" width="500">
+<img src="GitHub_img/VideoPlayer3.png" width="500">
+
