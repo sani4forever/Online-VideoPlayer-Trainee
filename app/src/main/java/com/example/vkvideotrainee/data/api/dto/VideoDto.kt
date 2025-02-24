@@ -1,7 +1,8 @@
 package com.example.vkvideotrainee.data.api.dto
 
-import com.google.gson.annotations.SerializedName
+import com.example.vkvideotrainee.data.db.entities.VideoEntity
 import com.example.vkvideotrainee.domain.models.Video
+import com.google.gson.annotations.SerializedName
 
 data class VideoDto(
     @SerializedName("id") val id: Int,
@@ -10,7 +11,6 @@ data class VideoDto(
     @SerializedName("url") val videoUrl: String,
     @SerializedName("duration") val duration: String
 ) {
-    fun toDomain(): Video {
-        return Video(id, title, thumbnailUrl, videoUrl, duration)
-    }
+    fun toDbEntity(): VideoEntity = VideoEntity(id, title, thumbnailUrl, videoUrl, duration)
+    fun toDomain(): Video = Video(id, title, thumbnailUrl, videoUrl, duration)
 }
