@@ -2,7 +2,6 @@ package com.example.vkvideotrainee.ui.fragments
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.fragment.navArgs
+import com.example.vkvideotrainee.R
 import com.example.vkvideotrainee.databinding.FragmentVideoPlayerBinding
 import com.example.vkvideotrainee.viewmodels.VideoPlayerViewModel
 import kotlinx.coroutines.launch
@@ -54,14 +54,15 @@ class VideoPlayerFragment : Fragment() {
             exoPlayer = ExoPlayer.Builder(requireContext()).build().also { player ->
                 binding.playerView.player = player
                 val mediaItem = MediaItem.fromUri(Uri.parse(videoUrl))
-                player.setMediaItem(mediaItem)
-                player.prepare()
-                player.seekTo(startPosition)
-                player.play()
-                Log.d("VideoPlayer", "Playing video from: $videoUrl at position: $startPosition")
+                with(player) {
+                    setMediaItem(mediaItem)
+                    prepare()
+                    seekTo(startPosition)
+                    play()
+                }
             }
         } catch (e: Exception) {
-            showError("Ошибка при инициализации ExoPlayer: ${e.localizedMessage}")
+            showError(getString(R.string.error, e.localizedMessage))
         }
     }
 
@@ -76,7 +77,7 @@ class VideoPlayerFragment : Fragment() {
         try {
             exoPlayer?.release()
         } catch (e: Exception) {
-            showError("Ошибка при освобождении ExoPlayer: ${e.localizedMessage}")
+            showError(getString(R.string.exoplayer_release_error, e.localizedMessage))
         } finally {
             exoPlayer = null
         }

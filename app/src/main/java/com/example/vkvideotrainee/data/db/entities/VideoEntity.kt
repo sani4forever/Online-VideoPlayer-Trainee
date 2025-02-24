@@ -12,13 +12,5 @@ data class VideoEntity(
     val videoUrl: String,
     val duration: String
 ) {
-    fun toDomain(): Video {
-        return Video(id, title, thumbnailUrl, videoUrl, duration)
-    }
-
-    companion object {
-        fun fromDomain(video: Video): VideoEntity {
-            return VideoEntity(video.id, video.title, video.thumbnailUrl, video.videoUrl, video.duration)
-        }
-    }
+    fun toDomain(): Video = Video(id, title, thumbnailUrl, videoUrl, duration)
 }

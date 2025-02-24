@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.vkvideotrainee.databinding.FragmentVideoListBinding
+import com.example.vkvideotrainee.domain.models.Video
 import com.example.vkvideotrainee.ui.adapters.VideoAdapter
 import com.example.vkvideotrainee.viewmodels.VideoViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -61,23 +63,23 @@ class VideoListFragment : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.videos.collectLatest { videos ->
-                        (binding.videoRecyclerView.adapter as? VideoAdapter)?.submitList(videos)
-                        binding.videoRecyclerView.visibility = if (videos.isNotEmpty()) View.VISIBLE else View.GONE
+                with(binding) {
+                    launch {
+                        viewModel.videos.collectLatest { videos: List<Video> ->
+                            (videoRecyclerView.adapter as? VideoAdapter)?.submitList(videos)
+                            videoRecyclerView.visibility =
+                                if (videos.isNotEmpty()) View.VISIBLE else View.GONE
+                        }
                     }
-                }
-                launch {
-                    viewModel.isLoading.collectLatest { isLoading ->
-                        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-                        binding.swipeRefreshLayout.isRefreshing = isLoading
+                    launch {
+                        viewModel.isLoading.collectLatest { isLoading: Boolean ->
+                            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                            swipeRefreshLayout.isRefreshing = isLoading
+                        }
                     }
-                }
-                launch {
-                    viewModel.errorMessage.collectLatest { errorMessage ->
-                        binding.errorTextView.apply {
-                            text = errorMessage
-                            visibility = if (errorMessage != null) View.VISIBLE else View.GONE
+                    launch {
+                        viewModel.toastMessage.collectLatest { message: String ->
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
