@@ -9,7 +9,7 @@ import com.example.vkvideotrainee.data.db.entities.VideoEntity
 @Dao
 interface VideoDao {
     @Query("SELECT * FROM videos")
-    suspend fun getAllVideos(): List<VideoEntity>
+    suspend fun getAllVideos(): List<VideoEntity>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertVideos(videos: List<VideoEntity>)

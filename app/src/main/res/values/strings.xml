@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">VK Video Trainee</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error">"Ошибка при инициализации ExoPlayer: %1$s</string>
+    <string name="exoplayer_release_error">Ошибка при освобождении ExoPlayer: %1$s</string>
 </resources>

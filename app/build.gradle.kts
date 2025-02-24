@@ -49,11 +49,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.core.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    testImplementation ("io.mockk:mockk-android:1.13.16")
+    testImplementation (libs.mockk.android)
     testImplementation (libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.androidx.core.testing)

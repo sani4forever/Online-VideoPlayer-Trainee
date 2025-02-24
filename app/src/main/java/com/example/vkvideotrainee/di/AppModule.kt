@@ -10,10 +10,13 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+const val BASE_URL = "https://pashok11.tw1.su/apis/vk_trainee/v1/"
+
 val appModule = module {
+
     single {
         Retrofit.Builder()
-            .baseUrl("https://pashok11.tw1.su/apis/vk_trainee/v1/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -26,5 +29,5 @@ val appModule = module {
 
     viewModel { VideoViewModel(get()) }
 
-    viewModel {VideoPlayerViewModel()}
+    viewModel { VideoPlayerViewModel() }
 }
