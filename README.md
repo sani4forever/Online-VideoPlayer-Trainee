@@ -5,11 +5,18 @@ VK Video Trainee is an Android application for browsing and playing videos. It f
 Technologies Used 🛠
 
 Jetpack Navigation
+
 Retrofit
+
 Media3 ExoPlayer
-Glide – Image loading
+
+Glide
+
 Koin
+
 Mockk
+
+JUnit
 
 Screenshoots 📸
 
